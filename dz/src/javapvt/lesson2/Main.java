@@ -1,5 +1,6 @@
 package javapvt.dz2;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -41,16 +42,16 @@ public class Main {
         System.out.println("The maximum value of the array is: " + max);
 
         //Changing min & max to 0 & 99
-        System.out.print("\nThe new array: \n[ ");
+        System.out.print("\nThe new array: \n");
         for (int i = 0; i < array.length; i++){
             if (array[i] == min) {
                 array[i] = 0;
             } else if (array[i] == max){
                 array[i] = 99;
             }
-            System.out.print(array[i] + " ");
         }
-        System.out.println("]\n");
+        String intArrayString = Arrays.toString(array);
+        System.out.println(intArrayString + "\n");
 
         // Exercise #2
         //Все классно, если повторений 2, а если цифра встречается 3 и более раз - косяк - повторения считаются несколько раз(
