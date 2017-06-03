@@ -1,6 +1,5 @@
 package javapvt.lesson5;
 
-
 public class Bank {
 
     private int twenties;
@@ -23,7 +22,9 @@ public class Bank {
         this.amount = amount;
     }
 
-    public int getTwenties() { return twenties; }
+    public int getTwenties() {
+        return twenties;
+    }
 
     public void setTwenties(int twenties) {
         this.twenties = twenties;
@@ -43,5 +44,17 @@ public class Bank {
 
     public void setHundreds(int hundreds) {
         this.hundreds = hundreds;
+    }
+
+    public boolean isHuEnough(int hdNeeded){
+        return (this.hundreds >= hdNeeded);
+    }
+
+    public boolean isFiEnough(int fftNeeded){
+        return (this.fifties >= fftNeeded);
+    }
+
+    public boolean isTwEnough(int twNeeded){
+        return (this.twenties >= twNeeded);
     }
 }
