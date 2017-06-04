@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        Bank bankomat = new Bank(4, 5, 2);
+        Bank bankomat = new Bank(10, 5, 0);
 
         printBalance(bankomat);
 
@@ -36,7 +36,6 @@ public class Main {
     }
 
 
-    // Надо дофига посокращать...........................................
     public static boolean getMoney(Bank bankomat, int sum) {
         boolean isSuccess = false;
         int sumI = sum;
@@ -45,114 +44,56 @@ public class Main {
         startPos[1] = bankomat.getFifties();
         startPos[2] = bankomat.getHundreds();
 
-
         if (sum < 20 || sum % 10 != 0) {
             System.out.println("Введите корректную сумму");
+            isSuccess = false;
+        } else if (sum == 30) {
+            cancelOperation(bankomat, startPos);
             isSuccess = false;
         } else if (sum > bankomat.getAmount()) {
             System.out.println("Недостаточно средств");
             isSuccess = false;
         } else {
-            int hd, fft = 0, tw;                    // для подсчета необходимого кол-ва купюр
-            if (sum % 100 == 0) {                       // кратные 100
-                hd = sum / 100;
-                if (!bankomat.isHuEnough(hd))
-                    hd = bankomat.getHundreds();
-                bankomat.setHundreds(bankomat.getHundreds() - hd);
-                sum -= hd * 100;
-                fft = sum / 50;
-                if (!bankomat.isFiEnough(fft)) {
-                    if (bankomat.getFifties() % 2 == 0)
-                        fft = bankomat.getFifties();
-                    else
-                        fft = bankomat.getFifties() - 1;
-                }
-                bankomat.setFifties(bankomat.getFifties() - fft);
-                tw = (sum - fft * 50) / 20;
-                if (!bankomat.isTwEnough(tw)) {
+            int hd, fft = 0, tw=0;                        // для подсчета необходимого кол-ва купюр
+
+            hd = sum / 100;                             // разбираемся с сотнями
+            if ((sumI % 100 / 10) % 2 != 0 && (sumI % 100) / 10 <= 3)
+                hd--;
+            if (!bankomat.isHuEnough(hd))
+                hd = bankomat.getHundreds();
+            bankomat.setHundreds(bankomat.getHundreds() - hd);
+
+            sum -= hd * 100;
+
+            if (sum == 0) {
+                printBill(bankomat, sumI, hd, fft, tw);
+                isSuccess = true;
+            } else {
+                fft = sum / 50;                             // черёд полтинников
+
+                if ((sumI % 100 / 10) % 2 != 0 && bankomat.getFifties() == 0) {
                     cancelOperation(bankomat, startPos);
                     isSuccess = false;
+                } else if ((sumI % 100 / 10) % 2 == 0 && bankomat.getFifties() < 2) {
+                    fft = 0;
                 } else {
-                    bankomat.setTwenties(bankomat.getTwenties() - tw);
-                    printBill(bankomat, sumI, hd, fft, tw);
-                    isSuccess = true;
-                }
-
-            } else if ((sum % 100 / 10) % 2 != 0) {
-                if ((sum % 100) / 10 <= 3) {                         // заканчивающиеся на 10 и 30
-                    hd = sum / 100 - 1;
-                    if (!bankomat.isHuEnough(hd))
-                        hd = bankomat.getHundreds();
-                    bankomat.setHundreds(bankomat.getHundreds() - hd);
-                    sum -= hd * 100;
-                    fft = sum / 50;
-                    if (bankomat.isFiEnough(fft - 1)) {
+                    if ((sumI % 100 / 10) % 2 != 0 && ((sumI % 100) / 10 <= 3) && bankomat.isFiEnough(fft - 1))
                         fft--;
-                        bankomat.setFifties(bankomat.getFifties() - fft);
-                    } else {
-                        fft = bankomat.getFifties();
-                        if (fft % 2 == 0) {
-                            if (fft > 0)
-                                fft--;
-                            bankomat.setFifties(bankomat.getFifties() - fft);
-                        }
-                    }
-                    sum -= fft * 50;
-                    tw = sum / 20;
-                    if (bankomat.isTwEnough(tw)) {
-                        bankomat.setTwenties(bankomat.getTwenties() - tw);
-                        printBill(bankomat, sumI, hd, fft, tw);
-                        isSuccess = true;
-                    } else {
-                        cancelOperation(bankomat, startPos);
-                        isSuccess = false;
-                    }
-                } else if ((sum % 100) / 10 >= 5) {                      // заканчивающиеся на 50 70 90
-                    if (bankomat.getFifties() == 0) {
-                        cancelOperation(bankomat, startPos);
-                        isSuccess = false;
-                    } else {
-                        hd = sum / 100;
-                        if (!bankomat.isHuEnough(hd))
-                            hd = bankomat.getHundreds();
-                        bankomat.setHundreds(bankomat.getHundreds() - hd);
-                        sum -= hd * 100;
-                        fft = sum / 50;
-                        if (!bankomat.isFiEnough(fft)) {
-                            fft = bankomat.getFifties();
-                            if (fft % 2 == 0)
-                                fft--;
-                        }
-                        bankomat.setFifties(bankomat.getFifties() - fft);
-                        tw = (sum - fft * 50) / 20;
-                        if (bankomat.isTwEnough(tw)) {
-                            bankomat.setTwenties(bankomat.getTwenties() - tw);
-                            printBill(bankomat, sumI, hd, fft, tw);
-                            isSuccess = true;
-                        } else {
-                            cancelOperation(bankomat, startPos);
-                            isSuccess = false;
-                        }
-                    }
-                }
-            } else {                                                // "четные"
-                hd = sum / 100;
-                if (! bankomat.isHuEnough(hd))
-                    hd = bankomat.getHundreds();
-                bankomat.setHundreds(bankomat.getHundreds() - hd);
-                sum -= hd * 100;
 
-                if (bankomat.getFifties() < 2){
-                    tw = sum / 20;
-                } else {
-                    fft = sum / 50;
                     if (!bankomat.isFiEnough(fft))
                         fft = bankomat.getFifties();
-                    if (fft % 2 != 0)
+
+                    if ((sumI % 100 / 10) % 2 == 0 && fft % 2 != 0)
                         fft--;
+                    else if ((sumI % 100 / 10) % 2 != 0 && fft % 2 == 0)
+                        fft--;
+
                     bankomat.setFifties(bankomat.getFifties() - fft);
-                    tw = (sum - fft * 50) / 20;
                 }
+
+                // Теперь двадцатки.......................................................
+                sum -= fft * 50;
+                tw = sum / 20;
                 if (bankomat.isTwEnough(tw)) {
                     bankomat.setTwenties(bankomat.getTwenties() - tw);
                     printBill(bankomat, sumI, hd, fft, tw);
@@ -165,7 +106,6 @@ public class Main {
         }
         return isSuccess;
     }
-
 
     public static void printBalance(Bank bankomat) {
         System.out.println("В банкомате " + bankomat.getAmount() + " р.");
@@ -193,5 +133,4 @@ public class Main {
     }
 
 }
-
 
