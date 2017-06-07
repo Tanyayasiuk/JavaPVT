@@ -18,9 +18,7 @@ public class Main implements OutputListener {
         Scanner scan = new Scanner(System.in);
         System.out.print("Введите сумму для снятия (больше 20 р., кратную 10): ");
 
-        int result = bankomat.getMoney(scan.nextInt());
-
-        bankomat.OnMoneyGet(result);
+        bankomat.OnMoneyGet(bankomat.getMoney(scan.nextInt()));
 
         bankomat.printBalance();
         //bankomat.printBanknotes();
