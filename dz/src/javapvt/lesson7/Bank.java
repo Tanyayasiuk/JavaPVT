@@ -6,15 +6,12 @@ public class Bank {
     private int fifties;
     private int hundreds;
     private int amount;
+    private int[] bill;
 
     private OutputListener listener;
 
     public void setListener(OutputListener listener) {
         this.listener = listener;
-    }
-
-    public void OnMoneyGet(int result){
-        listener.onOutput(result);
     }
 
 
@@ -59,19 +56,26 @@ public class Bank {
         return (having >= needed);
     }
 
+    public int[] getBill() {
+        return bill;
+    }
 
-    public boolean addMoney(int twenties, int fifties, int hundreds) {
+    public void setBill(int sumI, int hd, int fft, int tw) {
+        int[] bill = {sumI, hd, fft, tw};
+        this.bill = bill;
+    }
+
+    public void addMoney(int twenties, int fifties, int hundreds) {
         int addition = twenties * 20 + fifties *50 + hundreds * 100;
         this.setTwenties(this.getTwenties() + twenties);
         this.setFifties(this.getFifties() + fifties);
         this.setHundreds(this.getHundreds() + hundreds);
         this.setAmount(this.getAmount() + addition);
         System.out.println("Внесено " + addition + " р.");
-        printBalance();
-        return true;
+        listener.onSetMoney(this, true);
     }
 
-    public int getMoney(int sum) {
+    public void getMoney(int sum){
         int isSuccess;
         int sumI = sum;
         int[] startPos = new int[3];
@@ -99,7 +103,7 @@ public class Bank {
 
             if (sum == 0) {
                 this.setAmount(this.getAmount() - sum);
-                //printBill(sumI, hd, fft, tw);    //- из изначального задания - распечатывать, какие купюры были выданы
+                setBill(sumI, hd, fft, tw);    // формирует чек - какие купюры и сколько были выданы
                 isSuccess = 0;
             } else {
                 fft = sum / 50;                             // черёд полтинников
@@ -128,7 +132,7 @@ public class Bank {
                 if (this.isEnough(tw, this.getTwenties())) {
                     this.setTwenties(this.getTwenties() - tw);
                     this.setAmount(this.getAmount() - sumI);
-                    //printBill(sumI, hd, fft, tw);
+                    setBill(sumI, hd, fft, tw);
                     isSuccess = 0;
                 } else {
                     cancelOperation(startPos);
@@ -136,7 +140,7 @@ public class Bank {
                 }
             }
         }
-        return isSuccess;
+        listener.onGetMoney(this, isSuccess);
     }
 
     public void cancelOperation (int[] startPos){
@@ -149,14 +153,11 @@ public class Bank {
         System.out.println("В банкомате " + this.getAmount() + " р.");
     }
 
-    public void printBill (int sum, int hd, int fft, int tw){
-        System.out.println("Выдано " + sum + " р. купюрами:\n" + hd + " по 100 р.\n" + fft + " по 50 р.\n" + tw + " по 20 р.");
-    }
-
-    public void printBanknotes(){
+    /*public void printBanknotes(){
         System.out.println("В банкомате: ");
         System.out.println(this.getHundreds() + " купюр(-ы) по 100 р.");
         System.out.println(this.getFifties() + " купюр(-ы) по 50 р.");
         System.out.println(this.getTwenties() + " купюр(-ы) по 20 р.");
-    }
+
+    }*/
 }
