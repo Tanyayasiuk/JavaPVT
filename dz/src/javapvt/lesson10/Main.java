@@ -1,26 +1,15 @@
-package javapvt.lesson10;
+package javapvt.dz10;
 
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         Calculator calc = new Calculator();
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Введите певрое число: ");
-        boolean isOk = false;
-
-        while (!isOk){
-            try {
-                calc.firstNum = Integer.parseInt(sc.next());
-                isOk = true;
-            } catch (Exception e) {
-                System.out.print("Пожалуйста, вводите только числа: ");
-                isOk = false;
-            }
-        }
+        calc.firstNum = readNumber(sc, "Введите певрое число: ");
 
         System.out.print("Выберите операцию:\n1. Сложение\n2. Вычитание\n3. Умножение\n4. Деление\n: ");
         calc.operation = 0;
@@ -38,17 +27,7 @@ public class Main {
             }
         }
 
-        System.out.print("Введите второе число: ");
-        isOk = false;
-        while (!isOk){
-            try {
-                calc.secondNum = Integer.parseInt(sc.next());
-                isOk = true;
-            } catch (NumberFormatException e) {
-                System.out.print("Пожалуйста, вводите только числа: ");
-                isOk = false;
-            }
-        }
+        calc.secondNum = readNumber(sc, "Введите второе число: ");
 
         switch (calc.operation){
             case 1:
@@ -71,5 +50,19 @@ public class Main {
                     e.getRussianMessage(1);
                 }
         }
+    }
+
+    public static int readNumber (Scanner scan, String message){
+        int number;
+        System.out.print(message);
+        while (true){
+            try {
+                number = Integer.parseInt(scan.next());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.print("Пожалуйста, вводите только числа: ");
+            }
+        }
+        return number;
     }
 }
