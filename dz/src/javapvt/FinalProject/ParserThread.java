@@ -50,7 +50,7 @@ public class ParserThread extends Thread {
         //парсим XML
         System.out.println("Парсинг xml...");
         try {
-            Root root1 = parseXML("D:\\JavaOffline\\src\\finalProject\\Downloads\\bus_schedule.xml");
+            Root root1 = domParser("D:\\JavaOffline\\src\\finalProject\\Downloads\\bus_schedule.xml");
             System.out.println(root1.toString());
         } catch (Exception ex) {ex.getMessage();}
 
