@@ -1,17 +1,18 @@
 package FinalProject.controller;
 
-
-import FinalProject.controller.formatting.Dates;
+import FinalProject.controller.sorting.SortByNumber;
 import FinalProject.data.Bus;
 import FinalProject.data.Model;
+import FinalProject.controller.formatting.Dates;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class Controller {
 
     private static Controller controller;
-    private static volatile ArrayList<Bus> schedule;
+    private volatile ArrayList<Bus> schedule;
     private String modelsName;
     private String modelsDate;
 
@@ -27,7 +28,7 @@ public class Controller {
         return controller;
     }
 
-    public static ArrayList<Bus> getSchedule() {
+    public ArrayList<Bus> getSchedule() {
         return schedule;
     }
 
@@ -44,25 +45,29 @@ public class Controller {
         for (Bus b: schedule){
             b.printF();
         }
-
     }
 
     public void sort(int sortType){
         switch (sortType) {
-            case 5:
+            case 6:
                 break;
             case 1:
+                //Такой вариант релизации сортировки нравится мне куда больше отдельного класса
                 schedule.sort(Comparator.comparing(Bus::getPrice));
                 break;
             case 2:
                 schedule.sort(Comparator.comparing(Bus::getPrice).reversed());
                 break;
             case 3:
-                schedule.sort(Comparator.comparing(Bus::getBusNumber));
+                //Но можно и отдельным классом
+                Collections.sort(schedule, new SortByNumber());
                 break;
             case 4:
+                Collections.sort(schedule, new SortByNumber().reversed());
+                break;
+            case 5:
                 // Вроде та же история, что с Himalaya в тесте. "Instance reference"
-                this.getSchedule().sort(Comparator.comparing(Bus::getLocationEnd));
+                getSchedule().sort(Comparator.comparing(Bus::getLocationEnd));
                 break;
         }
         printSchedule();
@@ -72,7 +77,7 @@ public class Controller {
     public void search(int busNumber){
         int i = 0;
         for(Bus b: schedule){
-            if (busNumber == b.getBusNumber()) {
+            if (busNumber == b.getNumber()) {
                 b.printF();
                 i++;
             }
@@ -80,7 +85,7 @@ public class Controller {
         System.out.println("Найдено совпадений: " + i);
     }
 
-    //считаю два одинаковых метода с разными параметрами полиморфизмом. Точка.
+    //считаю два одинаковых метода с разными параметрами полиморфизмом.
     public void search(String locationStart){
         int i = 0;
         for (Bus b: schedule){

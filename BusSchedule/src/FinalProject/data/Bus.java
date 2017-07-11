@@ -24,7 +24,7 @@ public class Bus {
         this.id = id;
     }
 
-    public int getBusNumber() {
+    public int getNumber() {
         return busNumber;
     }
 
@@ -108,8 +108,7 @@ public class Bus {
     }
 
     public long getDuration(){
-        long durationSec = (Dates.stringToDate(this.dateEnd).getTime() - Dates.stringToDate(this.dateStart).getTime())/1000;
-        return durationSec;
+        return (Dates.stringToDate(this.dateEnd).getTime() - Dates.stringToDate(this.dateStart).getTime())/1000;
     }
 
 
