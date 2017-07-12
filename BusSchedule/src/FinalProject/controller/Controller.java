@@ -1,5 +1,6 @@
 package FinalProject.controller;
 
+import FinalProject.controller.sorting.SortByLocation;
 import FinalProject.controller.sorting.SortByNumber;
 import FinalProject.data.Bus;
 import FinalProject.data.Model;
@@ -66,8 +67,9 @@ public class Controller {
                 Collections.sort(schedule, new SortByNumber().reversed());
                 break;
             case 5:
-                // Вроде та же история, что с Himalaya в тесте. "Instance reference"
-                getSchedule().sort(Comparator.comparing(Bus::getLocationEnd));
+                Collections.sort(schedule, new SortByLocation());
+                //Другой вариант:
+                //schedule.sort(Comparator.comparing(Bus::getLocationEnd));
                 break;
         }
         printSchedule();

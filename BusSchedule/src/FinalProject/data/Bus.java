@@ -1,9 +1,9 @@
 package FinalProject.data;
 
 import FinalProject.controller.formatting.Dates;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 public class Bus {
 
@@ -81,7 +81,6 @@ public class Bus {
     }
     public void setWaypoints(ArrayList<String> list) {this.waypoints = list.toArray(new String[0]);}
 
-    @Override
     public String toString() {
         return "Bus{" +
                 "id= " + id + '\'' +
@@ -108,8 +107,7 @@ public class Bus {
     }
 
     public long getDuration(){
-        return (Dates.stringToDate(this.dateEnd).getTime() - Dates.stringToDate(this.dateStart).getTime())/1000;
+        long durationSec = (Dates.stringToDate(this.dateEnd).getTime() - Dates.stringToDate(this.dateStart).getTime())/1000;
+        return durationSec;
     }
-
-
 }

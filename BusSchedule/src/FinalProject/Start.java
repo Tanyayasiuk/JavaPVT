@@ -1,9 +1,10 @@
 package FinalProject;
 
-
+import FinalProject.controller.parsing.ParseXML;
+import FinalProject.data.Bus;
+import FinalProject.data.Model;
 import FinalProject.controller.downloading.Downloader;
 import FinalProject.controller.parsing.ParseJSON;
-import FinalProject.data.Model;
 import FinalProject.view.UI;
 
 public class Start {
