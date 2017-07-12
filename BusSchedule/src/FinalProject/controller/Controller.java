@@ -76,6 +76,7 @@ public class Controller {
     }
 
     // Методы поиска
+    //по номеру
     public void search(int busNumber){
         int i = 0;
         for(Bus b: schedule){
@@ -88,6 +89,7 @@ public class Controller {
     }
 
     //считаю два одинаковых метода с разными параметрами полиморфизмом.
+    //по месту назначения
     public void search(String locationStart){
         int i = 0;
         for (Bus b: schedule){
@@ -99,6 +101,7 @@ public class Controller {
         System.out.println("Найдено совпадений: " + i);
     }
 
+    //по цене
     public void searchPrice (int price){
         int i = 0;
         for (Bus b: schedule){
